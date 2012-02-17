@@ -72,7 +72,11 @@ public class FincaMain {
 		System.out.println(line);
 		System.out.println(strategy.getDescription() + System.lineSeparator());
 		printKredit(strategy.getBilligster1());
+		System.out.printf("Minimale Rate : %,10.2f %n%n",
+				strategy.getMinRate1());
 		printKredit(strategy.getBilligster2());
+		System.out.printf("Minimale Rate : %,10.2f %n%n",
+				strategy.getMinRate2());
 	}
 
 	private void konstanteRate(KreditStartDaten daten1, KreditStartDaten daten2)
@@ -100,7 +104,7 @@ public class FincaMain {
 					segment.getMonatsrate());
 		}
 		System.out.printf(
-				"Laufzeit: %1$d Monate (%2$tm.%2$tY - %3$tm.%3$tY) %n%n",
+				"Laufzeit      : %1$d Monate (%2$tm.%2$tY - %3$tm.%3$tY) %n",
 				kredit.getLaufzeit(), kredit.getStartDaten().getStart(),
 				kredit.getEnde());
 	}

@@ -11,7 +11,12 @@ public abstract class Strategy {
 	/**
 	 * Schrittgröße, um welche die Kredite verändert werden Defaultwert ist 10.0
 	 */
-	private double stepSize = 10.0;
+	private final double stepSize = 10.0;
+
+	private double gesamtMonatsrate;
+	private final double minRate1;
+
+	private final double minRate2;
 
 	protected Strategy(KreditStartDaten daten1, KreditStartDaten daten2)
 			throws Exception {
@@ -21,6 +26,13 @@ public abstract class Strategy {
 		this.billigster2 = new Kredit(daten2);
 		this.getBilligster1().run();
 		this.getBilligster2().run();
+
+		this.gesamtMonatsrate = getDaten1().getMonatsrate()
+				+ getDaten2().getMonatsrate();
+		this.minRate1 = this.getBilligster1().getStartZinsbetrag()
+				+ getStepSize();
+		this.minRate2 = this.getBilligster2().getStartZinsbetrag()
+				+ getStepSize();
 
 	}
 
@@ -46,6 +58,18 @@ public abstract class Strategy {
 		return billigster1.getKosten() + billigster2.getKosten();
 	}
 
+	protected double getGesamtMonatsrate() {
+		return gesamtMonatsrate;
+	}
+
+	public double getMinRate1() {
+		return minRate1;
+	}
+
+	public double getMinRate2() {
+		return minRate2;
+	}
+
 	public abstract String getShortDescription();
 
 	protected double getStepSize() {
@@ -65,8 +89,8 @@ public abstract class Strategy {
 		this.billigster2 = billigster2;
 	}
 
-	protected void setStepSize(double stepSize) {
-		this.stepSize = stepSize;
+	public void setGesamtMonatsrate(double gesamtMonatsrate) {
+		this.gesamtMonatsrate = gesamtMonatsrate;
 	}
 
 }
