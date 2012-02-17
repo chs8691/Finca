@@ -1,5 +1,6 @@
 package de.cs.finca.bl;
 
+//TODO *1 und 2 zusammenfassen in eine Struktur.
 public abstract class Strategy {
 
 	private Kredit billigster1;
