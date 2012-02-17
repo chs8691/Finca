@@ -8,6 +8,11 @@ public abstract class Strategy {
 
 	private final KreditStartDaten daten2;
 
+	/**
+	 * Schrittgröße, um welche die Kredite verändert werden Defaultwert ist 10.0
+	 */
+	private double stepSize = 10.0;
+
 	protected Strategy(KreditStartDaten daten1, KreditStartDaten daten2)
 			throws Exception {
 		this.daten1 = daten1;
@@ -43,6 +48,10 @@ public abstract class Strategy {
 
 	public abstract String getShortDescription();
 
+	protected double getStepSize() {
+		return stepSize;
+	}
+
 	/**
 	 * Runs the strategy to calculate the best result
 	 */
@@ -54,6 +63,10 @@ public abstract class Strategy {
 
 	protected void setBilligster2(Kredit billigster2) {
 		this.billigster2 = billigster2;
+	}
+
+	protected void setStepSize(double stepSize) {
+		this.stepSize = stepSize;
 	}
 
 }

@@ -33,9 +33,10 @@ public class EinfachesteSplitStrategy extends Strategy {
 
 		double gesamtMonatsrate = getDaten1().getMonatsrate()
 				+ getDaten2().getMonatsrate();
-		final double stepSize = 10.0;
-		double minRate1 = this.getBilligster1().getStartZinsbetrag() + stepSize;
-		double minRate2 = this.getBilligster2().getStartZinsbetrag() + stepSize;
+		double minRate1 = this.getBilligster1().getStartZinsbetrag()
+				+ getStepSize();
+		double minRate2 = this.getBilligster2().getStartZinsbetrag()
+				+ getStepSize();
 		double rate1 = minRate1;
 		double rate2 = gesamtMonatsrate - rate1;
 		KreditStartDaten daten1 = this.getDaten1().copy();
@@ -58,7 +59,7 @@ public class EinfachesteSplitStrategy extends Strategy {
 				this.setBilligster2(kredit2);
 			}
 
-			rate1 += stepSize;
+			rate1 += getStepSize();
 			rate2 = gesamtMonatsrate - rate1;
 		}
 
