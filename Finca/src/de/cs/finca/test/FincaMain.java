@@ -11,6 +11,7 @@ import de.cs.finca.bl.KreditStartDaten;
 import de.cs.finca.bl.Segment;
 import de.cs.finca.bl.Strategy;
 
+//TODO Nächste Strategie entwickeln
 public class FincaMain {
 	/**
 	 * @param args
