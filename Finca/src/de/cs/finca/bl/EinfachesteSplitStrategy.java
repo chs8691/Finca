@@ -31,12 +31,13 @@ public class EinfachesteSplitStrategy extends Strategy {
 	@Override
 	public void run() throws Exception {
 
-		double rate1 = getMinRate1();
+		double rate1 = getKreditDaten(1).getMinRate();
 		double rate2 = getGesamtMonatsrate() - rate1;
-		KreditStartDaten daten1 = getDaten1().copy();
-		KreditStartDaten daten2 = getDaten2().copy();
+		KreditStartDaten daten1 = getKreditDaten(1).getDaten().copy();
+		KreditStartDaten daten2 = getKreditDaten(2).getDaten().copy();
 
-		while (rate1 >= getMinRate1() && rate2 >= getMinRate2()) {
+		while (rate1 >= getKreditDaten(1).getMinRate()
+				&& rate2 >= getKreditDaten(2).getMinRate()) {
 			daten1.setMonatsrate(rate1);
 			daten2.setMonatsrate(rate2);
 			Kredit kredit1 = new Kredit(daten1);
@@ -46,11 +47,12 @@ public class EinfachesteSplitStrategy extends Strategy {
 			kredit2.run();
 
 			double aktKosten = kredit1.getKosten() + kredit2.getKosten();
-			double billigsteKosten = this.getBilligster1().getKosten()
-					+ this.getBilligster2().getKosten();
+			double billigsteKosten = getKreditDaten(1).getBilligster()
+					.getKosten()
+					+ getKreditDaten(2).getBilligster().getKosten();
 			if (aktKosten < billigsteKosten) {
-				this.setBilligster1(kredit1);
-				this.setBilligster2(kredit2);
+				getKreditDaten(1).setBilligster(kredit1);
+				getKreditDaten(2).setBilligster(kredit2);
 			}
 
 			rate1 += getStepSize();

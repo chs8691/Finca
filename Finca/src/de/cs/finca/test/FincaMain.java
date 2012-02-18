@@ -71,12 +71,12 @@ public class FincaMain {
 		System.out.print(f.toString());
 		System.out.println(line);
 		System.out.println(strategy.getDescription() + System.lineSeparator());
-		printKredit(strategy.getBilligster1());
-		System.out.printf("Minimale Rate : %,10.2f %n%n",
-				strategy.getMinRate1());
-		printKredit(strategy.getBilligster2());
-		System.out.printf("Minimale Rate : %,10.2f %n%n",
-				strategy.getMinRate2());
+		printKredit(strategy.getKreditDaten(1).getBilligster());
+		System.out.printf("Minimale Rate : %,10.2f %n%n", strategy
+				.getKreditDaten(1).getMinRate());
+		printKredit(strategy.getKreditDaten(2).getBilligster());
+		System.out.printf("Minimale Rate : %,10.2f %n%n", strategy
+				.getKreditDaten(2).getMinRate());
 	}
 
 	private void konstanteRate(KreditStartDaten daten1, KreditStartDaten daten2)

@@ -23,15 +23,17 @@ public class KonstanteRateStrategy extends Strategy {
 	@Override
 	public void run() throws Exception {
 
-		double gesamtMonatsrate = getDaten1().getMonatsrate()
-				+ getDaten2().getMonatsrate();
+		double gesamtMonatsrate = getKreditDaten(1).getDaten().getMonatsrate()
+				+ getKreditDaten(2).getDaten().getMonatsrate();
 		final double stepSize = 10.0;
-		double minRate1 = this.getBilligster1().getStartZinsbetrag() + stepSize;
-		double minRate2 = this.getBilligster2().getStartZinsbetrag() + stepSize;
+		double minRate1 = getKreditDaten(1).getBilligster()
+				.getStartZinsbetrag() + stepSize;
+		double minRate2 = getKreditDaten(2).getBilligster()
+				.getStartZinsbetrag() + stepSize;
 		double rate1 = minRate1;
 		double rate2 = gesamtMonatsrate - rate1;
-		KreditStartDaten daten1 = this.getDaten1().copy();
-		KreditStartDaten daten2 = this.getDaten2().copy();
+		KreditStartDaten daten1 = getKreditDaten(1).getDaten().copy();
+		KreditStartDaten daten2 = getKreditDaten(2).getDaten().copy();
 
 		while (rate1 >= minRate1 && rate2 >= minRate2) {
 			daten1.setMonatsrate(rate1);
@@ -56,11 +58,12 @@ public class KonstanteRateStrategy extends Strategy {
 			}
 
 			double aktKosten = kredit1.getKosten() + kredit2.getKosten();
-			double billigsteKosten = this.getBilligster1().getKosten()
-					+ this.getBilligster2().getKosten();
+			double billigsteKosten = getKreditDaten(1).getBilligster()
+					.getKosten()
+					+ getKreditDaten(2).getBilligster().getKosten();
 			if (aktKosten < billigsteKosten) {
-				this.setBilligster1(kredit1);
-				this.setBilligster2(kredit2);
+				getKreditDaten(1).setBilligster(kredit1);
+				getKreditDaten(2).setBilligster(kredit2);
 			}
 
 			rate1 += stepSize;
