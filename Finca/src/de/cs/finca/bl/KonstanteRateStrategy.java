@@ -10,9 +10,9 @@ public class KonstanteRateStrategy extends Strategy {
 
 	@Override
 	public String getDescription() {
-		return "Diese Strategie ermittelt die beste Monatratenaufteilung. "
-				+ "Mit Auslauf von Kredit1 wird die Rate von Kredit2 erhöht, so dass die Monatsbelastung bleibt. "
-				+ "Die monatliche Belastung ist aus der Summe der beiden Einzelwerte ermittelt.";
+		return "Mit Auslauf von Kredit 1 wird die Rate R2 von Kredit 2 erhöht, so dass die Monatsbelastung R1 + R2 "
+				+ System.lineSeparator()
+				+ "über den gesamten Zeitraum gleich bleibt.";
 	}
 
 	@Override

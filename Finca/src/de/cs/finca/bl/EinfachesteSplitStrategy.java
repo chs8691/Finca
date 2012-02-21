@@ -10,14 +10,14 @@ public class EinfachesteSplitStrategy extends Strategy {
 
 	@Override
 	public String getDescription() {
-		return "Diese Strategie ermittelt die beste Monatratenaufteilung, "
-				+ "während der Laufzeit werden die Monatraten NICHT mehr verändert. "
-				+ "Die monatliche Belastung ist aus der Summe der beiden Monatsraten ermittelt.";
+		return "Diese Strategie ermittelt die beste Verteilung der monatliche Gesamtbelastung R1 + R2 auf beide Kredite. "
+				+ System.lineSeparator()
+				+ "Während der Laufzeit werden die Monatraten R1 und R2 NICHT mehr verändert. ";
 	}
 
 	@Override
 	public String getShortDescription() {
-		return "Beste Monatsaufteilung ohne Ratenanpassung";
+		return "Optimale Rate, wenn die Raten nicht angepasst werden.";
 	}
 
 	/**

@@ -47,7 +47,7 @@ public abstract class Strategy {
 	public Strategy(KreditStartDaten daten1, KreditStartDaten daten2)
 			throws Exception {
 		this.kreditDaten1 = new KreditDaten(daten1, stepSize);
-		this.kreditDaten2 = new KreditDaten(daten1, stepSize);
+		this.kreditDaten2 = new KreditDaten(daten2, stepSize);
 		this.kreditDaten1.getBilligster().run();
 		this.kreditDaten2.getBilligster().run();
 

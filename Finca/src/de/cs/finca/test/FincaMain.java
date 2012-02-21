@@ -10,6 +10,7 @@ import de.cs.finca.bl.Kredit;
 import de.cs.finca.bl.KreditStartDaten;
 import de.cs.finca.bl.Segment;
 import de.cs.finca.bl.Strategy;
+import de.cs.finca.bl.ZweistufigeRateStrategy;
 
 //TODO Nächste Strategie entwickeln
 public class FincaMain {
@@ -27,18 +28,27 @@ public class FincaMain {
 
 			// Einfach mal die Kredite unabhängig von einander ausführen
 			fm.einfacherKredit(daten1);
+			System.out.println();
 			fm.einfacherKredit(daten2);
+			System.out.println();
 
 			// Raten willkürlich verteilen, summe muss 1004 sein
 			daten1.setMonatsrate(502.00);
 			daten2.setMonatsrate(502.00);
 			// SplitStrategie: Einfachste Form: Keine Ratenanpassung bei
 			// Auslaufen von Kredit 1
-			fm.einfachsterSplit(daten1, daten2);
+			fm.runStrategy(new EinfachesteSplitStrategy(daten1, daten2));
 
 			// SplitStrategie: Konstante Monatsbelastung durch Anpassung
 			// bei Auslauf vom ersten Kredit
-			fm.konstanteRate(daten1, daten2);
+			fm.runStrategy(new KonstanteRateStrategy(daten1, daten2));
+
+			// Nehmen wir nun eine Monatsrate von 1.300 .-
+			daten1.setMonatsrate(1004.00);
+			daten2.setMonatsrate(296.00);
+			fm.runStrategy(new EinfachesteSplitStrategy(daten1, daten2));
+			fm.runStrategy(new KonstanteRateStrategy(daten1, daten2));
+			fm.runStrategy(new ZweistufigeRateStrategy(daten1, daten2));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,15 +60,6 @@ public class FincaMain {
 		Kredit kredit = new Kredit(daten);
 		kredit.run();
 		printKredit(kredit);
-	}
-
-	private void einfachsterSplit(KreditStartDaten daten1,
-			KreditStartDaten daten2) throws Exception {
-		Strategy strategy = new EinfachesteSplitStrategy(daten1, daten2);
-		strategy.run();
-
-		ergebnisreportStrategielauf(strategy);
-
 	}
 
 	private void ergebnisreportStrategielauf(Strategy strategy) {
@@ -80,15 +81,6 @@ public class FincaMain {
 				.getKreditDaten(2).getMinRate());
 	}
 
-	private void konstanteRate(KreditStartDaten daten1, KreditStartDaten daten2)
-			throws Exception {
-		Strategy strategy = new KonstanteRateStrategy(daten1, daten2);
-		strategy.run();
-
-		ergebnisreportStrategielauf(strategy);
-
-	}
-
 	private void printKredit(Kredit kredit) {
 		System.out.println("Kredit " + kredit.getStartDaten().getName());
 		System.out.println("-------------------------");
@@ -108,5 +100,12 @@ public class FincaMain {
 				"Laufzeit      : %1$d Monate (%2$tm.%2$tY - %3$tm.%3$tY) %n",
 				kredit.getLaufzeit(), kredit.getStartDaten().getStart(),
 				kredit.getEnde());
+	}
+
+	private void runStrategy(Strategy strategy) throws Exception {
+		strategy.run();
+
+		ergebnisreportStrategielauf(strategy);
+
 	}
 }
