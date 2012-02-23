@@ -1,4 +1,4 @@
-package de.cs.finca.bl;
+package de.cs.finca.kredit;
 
 import java.util.ArrayList;
 import java.util.Calendar;

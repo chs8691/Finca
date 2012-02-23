@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 
-import de.cs.finca.bl.EinfachesteSplitStrategy;
-import de.cs.finca.bl.KonstanteRateStrategy;
-import de.cs.finca.bl.Kredit;
-import de.cs.finca.bl.KreditStartDaten;
-import de.cs.finca.bl.Segment;
-import de.cs.finca.bl.Strategy;
-import de.cs.finca.bl.ZweistufigeRateStrategy;
+import de.cs.finca.kredit.Kredit;
+import de.cs.finca.kredit.KreditStartDaten;
+import de.cs.finca.kredit.Segment;
+import de.cs.finca.strategie.EinfachesteSplitStrategy;
+import de.cs.finca.strategie.KonstanteRateStrategy;
+import de.cs.finca.strategie.Strategy;
+import de.cs.finca.strategie.ZweistufigeRateStrategy;
 
 //TODO Nächste Strategie entwickeln
 public class FincaMain {

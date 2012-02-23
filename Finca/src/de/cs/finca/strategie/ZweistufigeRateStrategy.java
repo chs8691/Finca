@@ -1,4 +1,7 @@
-package de.cs.finca.bl;
+package de.cs.finca.strategie;
+
+import de.cs.finca.kredit.Kredit;
+import de.cs.finca.kredit.KreditStartDaten;
 
 public class ZweistufigeRateStrategy extends Strategy {
 
