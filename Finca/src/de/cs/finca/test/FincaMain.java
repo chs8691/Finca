@@ -8,6 +8,7 @@ import de.cs.finca.kredit.Kredit;
 import de.cs.finca.kredit.KreditStartDaten;
 import de.cs.finca.kredit.Segment;
 import de.cs.finca.strategie.EinfachesteSplitStrategy;
+import de.cs.finca.strategie.FinanzierteSondertilgung;
 import de.cs.finca.strategie.KonstanteRateStrategy;
 import de.cs.finca.strategie.Strategy;
 import de.cs.finca.strategie.ZweistufigeRateStrategy;
@@ -19,10 +20,10 @@ public class FincaMain {
 	 */
 	public static void main(String[] args) {
 		FincaMain fm = new FincaMain();
-		KreditStartDaten daten1 = new KreditStartDaten("Nr. 1", 49795.30, 5.18,
-				1004, new Date());
-		KreditStartDaten daten2 = new KreditStartDaten("Nr. 2", 45000.00, 3.0,
-				1004, new Date());
+		KreditStartDaten daten1 = KreditStartDaten.create("Nr. 1", 49795.30,
+				5.18, 1004, new Date());
+		KreditStartDaten daten2 = KreditStartDaten.create("Nr. 2", 45000.00,
+				3.0, 1004, new Date());
 
 		try {
 
@@ -49,6 +50,8 @@ public class FincaMain {
 			fm.runStrategy(new EinfachesteSplitStrategy(daten1, daten2));
 			fm.runStrategy(new KonstanteRateStrategy(daten1, daten2));
 			fm.runStrategy(new ZweistufigeRateStrategy(daten1, daten2));
+
+			fm.runStrategy(new FinanzierteSondertilgung(daten1, daten2, 0));
 
 		} catch (Exception e) {
 			e.printStackTrace();

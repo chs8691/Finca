@@ -60,14 +60,7 @@ public class KonstanteRateStrategy extends Strategy {
 				}
 			}
 
-			double aktKosten = kredit1.getKosten() + kredit2.getKosten();
-			double billigsteKosten = getKreditDaten(1).getBilligster()
-					.getKosten()
-					+ getKreditDaten(2).getBilligster().getKosten();
-			if (aktKosten < billigsteKosten) {
-				getKreditDaten(1).setBilligster(kredit1);
-				getKreditDaten(2).setBilligster(kredit2);
-			}
+			gegenBilligstenKreditVergleiche(kredit1, kredit2);
 
 			rate1 += stepSize;
 			rate2 = gesamtMonatsrate - rate1;

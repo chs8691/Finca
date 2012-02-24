@@ -12,6 +12,7 @@ public class Kredit {
 	private double rest;
 	private final Date endeDate = new Date();
 	private final KreditStartDaten startDaten;
+	private int letzteSondertilgung;
 
 	private final List<Segment> segmente = new ArrayList<>();
 	private int aktSegment;
@@ -125,6 +126,7 @@ public class Kredit {
 		rest = lRest >= 0 ? lRest : 0;
 
 		endeDate.setTime(addMonate(endeDate, 1));
+		letzteSondertilgung++;
 		return rest > 0.0;
 
 	}
@@ -135,6 +137,8 @@ public class Kredit {
 		kosten = 0;
 		endeDate.setTime(startDaten.getStart().getTime());
 		aktSegment = 0;
+		letzteSondertilgung = 0;
+
 	}
 
 	/**
@@ -145,6 +149,35 @@ public class Kredit {
 		while (rate(rest))
 			;
 
+	}
+
+	/**
+	 * Führt eine Sondertilung durch, sofern möglich: einmal pro Jahr mit dem
+	 * max. Betrag, der durch die StartBedingungen festgelegt wurde.
+	 * 
+	 * @param betrag
+	 *            der Betrag der sondergetilgt werden soll
+	 * @return Restbetrag der nicht verbraucht wurde
+	 * @throws IllegalArgumentException
+	 *             wenn betrag negativ
+	 */
+	public double sondertilgung(double betrag) {
+		if (betrag < 0)
+			throw new IllegalArgumentException();
+
+		// Ab dem 2. Jahr darf einmal jährlich getilgt werden
+		if (letzteSondertilgung < 12)
+			return betrag;
+
+		// Tilgungsbetrag auf Obergrenze begrenzen
+		double sondertilgungsBetrag = Math.min(betrag,
+				startDaten.getMaxSondertilgung());
+
+		// Tilgen
+		rest -= sondertilgungsBetrag;
+
+		// Nicht getilgten Betrag zurückgeben
+		return betrag - sondertilgungsBetrag;
 	}
 
 	public boolean zuEnde() {

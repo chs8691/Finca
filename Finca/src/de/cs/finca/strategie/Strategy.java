@@ -3,7 +3,7 @@ package de.cs.finca.strategie;
 import de.cs.finca.kredit.Kredit;
 import de.cs.finca.kredit.KreditStartDaten;
 
-public abstract class Strategy {
+abstract public class Strategy {
 
 	public class KreditDaten {
 		private Kredit billigster;
@@ -59,6 +59,24 @@ public abstract class Strategy {
 
 	}
 
+	/**
+	 * Prüft, ob die Kreditkombination billiger ist, als der bisher billigste.
+	 * Wenn ja, wird dieser als neue billigste Kreditkombination gesetzt.
+	 * 
+	 * @param kredit1
+	 * @param kredit2
+	 */
+	public void gegenBilligstenKreditVergleiche(Kredit kredit1, Kredit kredit2) {
+		double aktKosten = kredit1.getKosten() + kredit2.getKosten();
+		double billigsteKosten = getKreditDaten(1).getBilligster().getKosten()
+				+ getKreditDaten(2).getBilligster().getKosten();
+		if (aktKosten < billigsteKosten) {
+			getKreditDaten(1).setBilligster(kredit1);
+			getKreditDaten(2).setBilligster(kredit2);
+		}
+
+	}
+
 	public abstract String getDescription();
 
 	public double getGesamtkosten() {
@@ -90,7 +108,9 @@ public abstract class Strategy {
 	}
 
 	/**
-	 * Runs the strategy to calculate the best result
+	 * Führt die Strategie aus. In der Methode muss am Ende
+	 * <code>getKreditdaten(nr).setBilligster()</code> für beide Kredite gesetzt
+	 * werden (sofern sich dieser vom Startzeitpunkt unterscheidet).
 	 */
 	public abstract void run() throws Exception;
 
