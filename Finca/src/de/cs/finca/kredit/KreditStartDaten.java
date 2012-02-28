@@ -10,9 +10,9 @@ import java.util.Date;
  */
 public class KreditStartDaten {
 	public static KreditStartDaten create(String name, double volumen,
-			double zinsSatz, double monatsrate, Date start) {
-		return new KreditStartDaten(name, volumen, zinsSatz, monatsrate, start,
-				0);
+			double zinsSatz, double monatsrate, int maxSegmente, Date start) {
+		return new KreditStartDaten(name, volumen, zinsSatz, monatsrate,
+				maxSegmente, start, 0);
 	}
 
 	/**
@@ -28,10 +28,10 @@ public class KreditStartDaten {
 	 * @return KreditStartDaten
 	 */
 	public static KreditStartDaten createMitSondertilgung(String name,
-			double volumen, double zinsSatz, double monatsrate, Date start,
-			double maxSondertilgung) {
-		return new KreditStartDaten(name, volumen, zinsSatz, monatsrate, start,
-				maxSondertilgung);
+			double volumen, double zinsSatz, double monatsrate,
+			int maxSegmente, Date start, double maxSondertilgung) {
+		return new KreditStartDaten(name, volumen, zinsSatz, monatsrate,
+				maxSegmente, start, maxSondertilgung);
 	}
 
 	/**
@@ -48,6 +48,7 @@ public class KreditStartDaten {
 	private double maxSondertilgung;
 
 	private final Date start;
+	private int maxSegmente;
 
 	/**
 	 * 
@@ -57,16 +58,20 @@ public class KreditStartDaten {
 	 * @param monatsrate
 	 * @param start
 	 * @param gesamtSondertilgung
+	 * @param maxSegmente
+	 *            Wie oft die Monatsrate angepasst werden kann
 	 * @throws IllegalArgumentException
 	 *             wenn ein Betrag negativ ist
 	 */
 	private KreditStartDaten(String name, double volumen, double zinsSatz,
-			double monatsrate, Date start, double maxSondertilgung) {
+			double monatsrate, int maxSegmente, Date start,
+			double maxSondertilgung) {
 		this.name = name;
 		this.volumen = volumen;
 		this.zinsSatz = zinsSatz;
 		this.monatsrate = monatsrate;
 		this.maxSondertilgung = maxSondertilgung;
+		this.maxSegmente = maxSegmente;
 		this.start = new Date(start.getTime());
 
 		if (this.volumen < 0 || this.zinsSatz < 0 || this.monatsrate < 0
@@ -76,8 +81,12 @@ public class KreditStartDaten {
 	}
 
 	public KreditStartDaten copy() {
-		return new KreditStartDaten(name, volumen, zinsSatz, monatsrate, start,
-				maxSondertilgung);
+		return new KreditStartDaten(name, volumen, zinsSatz, monatsrate,
+				maxSegmente, new Date(start.getTime()), maxSondertilgung);
+	}
+
+	public int getMaxSegmente() {
+		return maxSegmente;
 	}
 
 	public double getMaxSondertilgung() {
@@ -102,6 +111,10 @@ public class KreditStartDaten {
 
 	public double getZinsSatz() {
 		return zinsSatz;
+	}
+
+	public void setMaxSegmente(int maxSegmente) {
+		this.maxSegmente = maxSegmente;
 	}
 
 	/**

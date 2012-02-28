@@ -13,8 +13,10 @@ public class Kredit {
 	private final Date endeDate = new Date();
 	private final KreditStartDaten startDaten;
 	private int letzteSondertilgung;
+	private double sondertilgungGesamt;
 
 	private final List<Segment> segmente = new ArrayList<>();
+
 	private int aktSegment;
 
 	/**
@@ -24,7 +26,7 @@ public class Kredit {
 	 * @throws Exception
 	 */
 	public Kredit(KreditStartDaten daten) throws Exception {
-		this.startDaten = daten;
+		this.startDaten = daten.copy();
 
 		if (this.startDaten.getZinsSatz() <= 0
 				|| this.startDaten.getZinsSatz() >= 100) {
@@ -67,7 +69,11 @@ public class Kredit {
 	}
 
 	private double ermittleZinsbetrag(double volumen) {
-		return volumen * (startDaten.getZinsSatz() / 100.0) / 12.0;
+		return ermittleZinsbetrag(startDaten.getZinsSatz(), volumen);
+	}
+
+	private double ermittleZinsbetrag(double zinsSatz, double volumen) {
+		return volumen * (zinsSatz / 100.0) / 12.0;
 	}
 
 	public Date getEnde() {
@@ -91,13 +97,24 @@ public class Kredit {
 		return segmente;
 	}
 
+	public double getSondertilgungGesamt() {
+		return sondertilgungGesamt;
+	}
+
 	public KreditStartDaten getStartDaten() {
 		return startDaten;
 	}
 
+	/**
+	 * Der StartZinsbetrag ist die Mindestmonatsrate. Sie errechnet sich aus dem
+	 * Zins + 1 % Tilgung zusammen.
+	 * 
+	 * @return double
+	 */
 	public double getStartZinsbetrag() {
 
-		return ermittleZinsbetrag(startDaten.getVolumen());
+		return ermittleZinsbetrag(startDaten.getZinsSatz() + 1,
+				startDaten.getVolumen());
 	}
 
 	public void neuesSegment(double monatsrate) {
@@ -138,6 +155,7 @@ public class Kredit {
 		endeDate.setTime(startDaten.getStart().getTime());
 		aktSegment = 0;
 		letzteSondertilgung = 0;
+		sondertilgungGesamt = 0;
 
 	}
 
@@ -153,7 +171,8 @@ public class Kredit {
 
 	/**
 	 * Führt eine Sondertilung durch, sofern möglich: einmal pro Jahr mit dem
-	 * max. Betrag, der durch die StartBedingungen festgelegt wurde.
+	 * max. Betrag, der durch die StartBedingungen festgelegt wurde. Der Kredit
+	 * muss natürlich noch laufen.
 	 * 
 	 * @param betrag
 	 *            der Betrag der sondergetilgt werden soll
@@ -165,6 +184,13 @@ public class Kredit {
 		if (betrag < 0)
 			throw new IllegalArgumentException();
 
+		if (betrag == 0)
+			return betrag;
+
+		// Kredit bereits beendet, keine Sondertilgung mehr möglich/nötig
+		if (zuEnde())
+			return betrag;
+
 		// Ab dem 2. Jahr darf einmal jährlich getilgt werden
 		if (letzteSondertilgung < 12)
 			return betrag;
@@ -172,9 +198,15 @@ public class Kredit {
 		// Tilgungsbetrag auf Obergrenze begrenzen
 		double sondertilgungsBetrag = Math.min(betrag,
 				startDaten.getMaxSondertilgung());
+		// Bei Kreditende: Max. den Rest tilgen
+		sondertilgungsBetrag = Math.min(sondertilgungsBetrag, rest);
 
 		// Tilgen
 		rest -= sondertilgungsBetrag;
+		sondertilgungGesamt += sondertilgungsBetrag;
+
+		// Sondertilgung in einem Jahr ermöglichen
+		letzteSondertilgung = 0;
 
 		// Nicht getilgten Betrag zurückgeben
 		return betrag - sondertilgungsBetrag;

@@ -3,9 +3,9 @@ package de.cs.finca.strategie;
 import de.cs.finca.kredit.Kredit;
 import de.cs.finca.kredit.KreditStartDaten;
 
-public class EinfachesteSplitStrategy extends Strategy {
+public class EinfachsteSplitStrategy extends Strategy {
 
-	public EinfachesteSplitStrategy(KreditStartDaten daten1,
+	public EinfachsteSplitStrategy(KreditStartDaten daten1,
 			KreditStartDaten daten2) throws Exception {
 		super(daten1, daten2);
 
@@ -20,7 +20,8 @@ public class EinfachesteSplitStrategy extends Strategy {
 
 	@Override
 	public String getShortDescription() {
-		return "Optimale Rate, wenn die Raten nicht angepasst werden.";
+		return this.getClass().getSimpleName()
+				+ ": Optimale Rate, wenn die Raten nicht angepasst werden.";
 	}
 
 	/**
@@ -39,10 +40,25 @@ public class EinfachesteSplitStrategy extends Strategy {
 		KreditStartDaten daten1 = getKreditDaten(1).getDaten().copy();
 		KreditStartDaten daten2 = getKreditDaten(2).getDaten().copy();
 
-		while (rate1 >= getKreditDaten(1).getMinRate()
+		// Da wir die Rate ja max. einmal ändern wollen, muss das von beiden
+		// Kredit unterstützt werden
+		int maxSegmente = Math.min(getKreditDaten(1).getDaten()
+				.getMaxSegmente(), getKreditDaten(2).getDaten()
+				.getMaxSegmente());
+
+		boolean end = false;
+
+		while (!end && rate1 >= getKreditDaten(1).getMinRate()
 				&& rate2 >= getKreditDaten(2).getMinRate()) {
-			daten1.setMonatsrate(rate1);
-			daten2.setMonatsrate(rate2);
+			if (maxSegmente >= 1) {
+				// Ändern wir genau einmal den Kredit
+				daten1.setMonatsrate(rate1);
+				daten2.setMonatsrate(rate2);
+			} else {
+				// Wir dürfen den Kredit gar nicht ändern: alles nur einmal
+				// durchlaufen
+				end = true;
+			}
 			Kredit kredit1 = new Kredit(daten1);
 			Kredit kredit2 = new Kredit(daten2);
 
