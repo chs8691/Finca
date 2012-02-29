@@ -12,7 +12,6 @@ import de.cs.finca.strategie.FinanzierteSondertilgung;
 import de.cs.finca.strategie.KonstanteRateStrategy;
 import de.cs.finca.strategie.Strategy;
 
-//TODO Nächste Strategie entwickeln
 public class FincaMain {
 	private static final double zinsSatz2 = 3.0;
 	private static final double zinsSatz1 = 5.18;

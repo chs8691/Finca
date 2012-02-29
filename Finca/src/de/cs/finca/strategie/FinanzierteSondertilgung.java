@@ -3,6 +3,7 @@ package de.cs.finca.strategie;
 import de.cs.finca.kredit.Kredit;
 import de.cs.finca.kredit.KreditStartDaten;
 
+//TODO maxSegmente einführen
 public class FinanzierteSondertilgung extends Strategy {
 
 	/**
